@@ -6,7 +6,7 @@
 /*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:42:59 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/09/13 18:02:03 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/09/13 20:23:23 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,31 @@
 
 void initialize_tool(t_tool *tool,char **argv,int argc)
 {
-    tool->fork_num = philo_atol(argv[0]);
-    tool->ttd = philo_atol(argv[1]);
-    tool->tte = philo_atol(argv[2]);
-    tool->tts = philo_atol(argv[3]);
-    if (argc == 5)
-        tool->eat_time = philo_atol(argv[4]);
+    tool->fork_num = philo_atol(argv[1]);
+    tool->ttd = philo_atol(argv[2]);
+    tool->tte = philo_atol(argv[3]);
+    tool->tts = philo_atol(argv[4]);
+    if (argc == 6)
+        tool->eat_time = philo_atol(argv[5]);
     else
         tool->eat_time = 0;
-    tool->forks = (int *)malloc(sizeof(int) * tool->fork_num);
-    memset(tool->forks, 0, sizeof(tool->forks));
+    // tool->forks = (int *)malloc(sizeof(int) * tool->fork_num);
+    // memset(tool->forks, 0, sizeof(int) * tool->fork_num);
     tool->index = 0;
+    initialize_mutexes(tool);
+}
+
+void initialize_mutexes(t_tool *tool)
+{
+    long i;
+
+    i = 0;
+    tool->mutexes = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * tool->fork_num);
+    while(i < tool->fork_num)
+    {
+        pthread_mutex_init(&(tool->mutexes[i]),NULL);
+        i++;
+    }
 }
 
 long	philo_atol(const char *str)
@@ -56,7 +70,7 @@ long	philo_atol(const char *str)
 	return (flg * num);
 }
 
-void initialize_philos(t_philo **philos,int num)
+void initialize_philos(t_philo **philos,int num,t_tool *tool)
 {
     int i;
 
@@ -64,8 +78,9 @@ void initialize_philos(t_philo **philos,int num)
     *philos = (t_philo *)malloc(sizeof(t_philo) * (num + 1));
     while(i < num)
     {
-        philos[i]->state=TAKING_ZERO;
-        philos[i]->eat_time=0;
+        (*philos)[i].state=TAKING_ZERO;
+        (*philos)[i].eat_time=0;
+        (*philos)[i].tool=tool;
         i++;
     }
     philos[i] = NULL;

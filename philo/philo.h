@@ -11,18 +11,19 @@ typedef struct s_tool {
     long tte;
     long tts;
     long eat_time;
-    struct timeval tv;
     int is_dead;
-    pthread_mutex_t mutex;
-    int *forks;
+    // int *forks;
     long    index;
+    pthread_mutex_t *mutexes;
 } t_tool;
 
 typedef struct s_philo {
+    long id;
     int state;
     long eat_time;
     long long state_time;
     pthread_t thread;
+    t_tool *tool;
 } t_philo;
 
 typedef enum e_state {
@@ -34,9 +35,17 @@ typedef enum e_state {
     DIED = 5
 } t_state;
 
+typedef enum e_fork_state {
+    FREE = 0,
+    IN_USE = 1
+} t_fork_state;
+
+
+
 //main.c
 
 //initialization.c
 void    initialize_tool(t_tool *tool,char **argv,int argc);
+void initialize_mutexes(t_tool *tool);
 long	philo_atol(const char *str);
-void initialize_philos(t_philo **philos,int num);
+void initialize_philos(t_philo **philos,int num,t_tool *tool);
