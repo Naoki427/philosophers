@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:42:59 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/09/13 20:23:23 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/09/13 23:39:56 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void initialize_tool(t_tool *tool,char **argv,int argc)
     // tool->forks = (int *)malloc(sizeof(int) * tool->fork_num);
     // memset(tool->forks, 0, sizeof(int) * tool->fork_num);
     tool->index = 0;
-    initialize_mutexes(tool);
+    tool->philos_alive = 1;
+    // initialize_mutexes(tool);
 }
 
 void initialize_mutexes(t_tool *tool)
@@ -81,7 +82,7 @@ void initialize_philos(t_philo **philos,int num,t_tool *tool)
         (*philos)[i].state=TAKING_ZERO;
         (*philos)[i].eat_time=0;
         (*philos)[i].tool=tool;
+        (*philos)[i].state_time=get_current_time();
         i++;
     }
-    philos[i] = NULL;
 }

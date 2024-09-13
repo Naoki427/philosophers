@@ -4,7 +4,8 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
 
 SRC = 	main.c \
-		initialization.c
+		initialization.c \
+		utils.c
 
 OBJ = $(SRC:.c=.o)
 
