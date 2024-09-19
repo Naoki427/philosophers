@@ -1,11 +1,13 @@
 NAME = philo
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra #-g -fsanitize=address
 
 SRC = 	main.c \
 		initialization.c \
-		utils.c
+		utils.c \
+		error.c \
+		monitor.c
 
 OBJ = $(SRC:.c=.o)
 
