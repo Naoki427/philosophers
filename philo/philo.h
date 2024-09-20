@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 13:43:07 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/09/19 13:45:41 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/09/20 11:49:38 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ int						check_valid_num(char *arg);
 
 // monitor.c
 void					check_all_philos(t_tool *tool);
-int						track_meals(t_tool *tool, t_philo *philos);
+int						track_meals(t_tool *tool, t_philo *philos,int i);
 void					*monitor_routine(void *arg);
 #endif

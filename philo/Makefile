@@ -1,7 +1,9 @@
 NAME = philo
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra #-g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra
+# CFLAGS += -fsanitize=address -g
+CFLAGS += -fsanitize=thread 
 
 SRC = 	main.c \
 		initialization.c \
