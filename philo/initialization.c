@@ -6,13 +6,13 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:42:59 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/09/19 13:26:06 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/09/25 18:30:08 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	initialize_tool(t_tool *tool, char **argv, int argc)
+int	initialize_tool(t_tool *tool, char **argv, int argc)
 {
 	tool->fork_num = philo_atol(argv[1]);
 	tool->ttd = philo_atol(argv[2]);
@@ -24,23 +24,26 @@ void	initialize_tool(t_tool *tool, char **argv, int argc)
 		tool->eat_time = 0;
 	tool->index = 0;
 	tool->philos_alive = 1;
-	tool->start_time = get_current_time();
-	initialize_mutexes(tool);
+	return (initialize_mutexes(tool));
 }
 
-void	initialize_mutexes(t_tool *tool)
+int	initialize_mutexes(t_tool *tool)
 {
 	long	i;
 
 	i = 0;
 	tool->mutexes = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
 			* tool->fork_num);
+	if (!tool->mutexes)
+		return (1);
 	while (i < tool->fork_num)
 	{
 		pthread_mutex_init(&(tool->mutexes[i]), NULL);
 		i++;
 	}
 	pthread_mutex_init(&(tool->alive_mutex), NULL);
+	pthread_mutex_init(&(tool->print_mutex), NULL);
+	return (0);
 }
 
 long	philo_atol(const char *str)
@@ -66,17 +69,21 @@ long	philo_atol(const char *str)
 	return (flg * num);
 }
 
-void	initialize_philos(t_philo **philos, int num, t_tool *tool)
+int	initialize_philos(t_philo **philos, int num, t_tool *tool)
 {
 	int	i;
 
 	i = 0;
 	*philos = (t_philo *)malloc(sizeof(t_philo) * (num));
+	if (!(*philos))
+		return (1);
 	while (i < num)
 	{
 		(*philos)[i].eat_time = 0;
 		(*philos)[i].tool = tool;
 		(*philos)[i].state_time = get_current_time();
+		pthread_mutex_init(&(((*philos)[i]).meal), NULL);
 		i++;
 	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 13:43:07 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/09/20 11:49:38 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/09/25 18:20:48 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_tool
 	t_philo				*philos;
 	int					philos_alive;
 	pthread_mutex_t		alive_mutex;
+	pthread_mutex_t		print_mutex;
 	long long			start_time;
 }						t_tool;
 
@@ -42,23 +43,27 @@ typedef struct s_philo
 	long				eat_time;
 	long long			state_time;
 	pthread_t			thread;
+	pthread_mutex_t		meal;
 	t_tool				*tool;
 }						t_philo;
 
 // main.c
 void					*run_philosopher_loop(void *arg);
-long long				get_current_time(void);
+void					*run_philosopher_loop(void *arg);
+void					cleanup_all(t_tool *tool, t_philo *philos);
+void					create_threads(t_tool *tool, t_philo *philos);
 
 // initialization.c
-void					initialize_tool(t_tool *tool, char **argv, int argc);
-void					initialize_mutexes(t_tool *tool);
+int						initialize_tool(t_tool *tool, char **argv, int argc);
+int						initialize_mutexes(t_tool *tool);
 long					philo_atol(const char *str);
-void					initialize_philos(t_philo **philos, int num,
+int						initialize_philos(t_philo **philos, int num,
 							t_tool *tool);
 
 // utils.c
 void					put_message(char *message, long num, t_tool *tool);
 long long				get_current_time(void);
+void					precise_usleep(long long sleep_time);
 
 // error.c
 int						validate_input(int argc, char **argv);
@@ -66,6 +71,7 @@ int						check_valid_num(char *arg);
 
 // monitor.c
 void					check_all_philos(t_tool *tool);
-int						track_meals(t_tool *tool, t_philo *philos,int i);
+int						check_end(t_tool *tool, int i);
+int						track_meals(t_tool *tool, t_philo *philos, int i);
 void					*monitor_routine(void *arg);
 #endif

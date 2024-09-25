@@ -3,7 +3,7 @@ CC = cc
 
 CFLAGS = -Wall -Werror -Wextra
 # CFLAGS += -fsanitize=address -g
-CFLAGS += -fsanitize=thread 
+# CFLAGS += -g -fsanitize=thread
 
 SRC = 	main.c \
 		initialization.c \
