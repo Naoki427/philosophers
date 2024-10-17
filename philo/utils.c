@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 23:25:53 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/09/25 18:22:03 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:38:09 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,14 @@ void	set_statetime(t_tool *tool, t_philo *philo)
 
 void	put_message(char *message, long num, t_tool *tool)
 {
-	static int	flg = 0;
-
-	pthread_mutex_lock(&(tool->print_mutex));
-	if (flg == 0)
-	{
-		tool->start_time = get_current_time();
-		set_statetime(tool, tool->philos);
-		flg = 1;
-	}
 	pthread_mutex_lock(&(tool->alive_mutex));
 	if (!tool->philos_alive)
 	{
 		pthread_mutex_unlock(&(tool->alive_mutex));
-		pthread_mutex_unlock(&(tool->print_mutex));
 		return ;
 	}
 	printf(message, get_current_time() - tool->start_time, num);
 	pthread_mutex_unlock(&(tool->alive_mutex));
-	pthread_mutex_unlock(&(tool->print_mutex));
 }
 
 long long	get_current_time(void)
@@ -57,7 +46,7 @@ long long	get_current_time(void)
 	return (result);
 }
 
-void	precise_usleep(long long sleep_time)
+void	precise_usleep(long long sleep_time, t_tool *tool)
 {
 	long long	now;
 
@@ -67,5 +56,12 @@ void	precise_usleep(long long sleep_time)
 		usleep(50);
 		if (get_current_time() - now >= sleep_time)
 			break ;
+		pthread_mutex_lock(&(tool->alive_mutex));
+		if (!tool->philos_alive)
+		{
+			pthread_mutex_unlock(&(tool->alive_mutex));
+			break ;
+		}
+		pthread_mutex_unlock(&(tool->alive_mutex));
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 14:24:14 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/09/25 18:09:49 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:14:12 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ void	do_sycle(t_tool *tool, t_philo *philo)
 	philo->state_time = get_current_time();
 	philo->eat_time++;
 	pthread_mutex_unlock(&(philo->meal));
-	precise_usleep(tool->tte);
+	precise_usleep(tool->tte, tool);
 	pthread_mutex_unlock(&(tool->mutexes[left_fork]));
 	pthread_mutex_unlock(&(tool->mutexes[philo->id]));
 	put_message("%lld %ld is sleeping\n", philo->id + 1, tool);
-	precise_usleep(tool->tts);
+	precise_usleep(tool->tts, tool);
 	put_message("%lld %ld is thinking\n", philo->id + 1, tool);
 }
 
@@ -68,7 +68,7 @@ void	*run_philosopher_loop(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(300);
+		usleep(10000);
 	while (1)
 	{
 		if (philo->tool->fork_num == 1)

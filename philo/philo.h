@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 13:43:07 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/09/25 18:20:48 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:44:43 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_tool
 	t_philo				*philos;
 	int					philos_alive;
 	pthread_mutex_t		alive_mutex;
-	pthread_mutex_t		print_mutex;
 	long long			start_time;
 }						t_tool;
 
@@ -63,7 +62,7 @@ int						initialize_philos(t_philo **philos, int num,
 // utils.c
 void					put_message(char *message, long num, t_tool *tool);
 long long				get_current_time(void);
-void					precise_usleep(long long sleep_time);
+void					precise_usleep(long long sleep_time, t_tool *tool);
 
 // error.c
 int						validate_input(int argc, char **argv);
@@ -71,7 +70,8 @@ int						check_valid_num(char *arg);
 
 // monitor.c
 void					check_all_philos(t_tool *tool);
-int						check_end(t_tool *tool, int i);
-int						track_meals(t_tool *tool, t_philo *philos, int i);
+int						check_end(t_tool *tool, int i, long long state_time,
+							int meal_time);
+int						track_meals(t_tool *tool, int i, int meal_time);
 void					*monitor_routine(void *arg);
 #endif

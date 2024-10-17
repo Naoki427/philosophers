@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:42:59 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/09/25 18:30:08 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:44:39 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	initialize_mutexes(t_tool *tool)
 		i++;
 	}
 	pthread_mutex_init(&(tool->alive_mutex), NULL);
-	pthread_mutex_init(&(tool->print_mutex), NULL);
 	return (0);
 }
 
